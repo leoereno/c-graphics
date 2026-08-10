@@ -16,9 +16,9 @@ int main(void) {
     SDL_Event event;
 
     window = SDL_CreateWindow(
-        "Title", 
-        WIDTH, 
-        HEIGHT, 
+        "Framebuffer", 
+        WIDTH * 4, 
+        HEIGHT * 4, 
         0);
     
     renderer = SDL_CreateRenderer(
@@ -33,6 +33,8 @@ int main(void) {
         WIDTH,
         HEIGHT
     );
+
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
     uint8_t is_running = 1;
 
