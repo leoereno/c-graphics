@@ -1,4 +1,17 @@
+CC := gcc
+CFLAGS := -std=c17 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L $(shell pkg-config --cflags sdl3 fribidi libdrm libdecor-0)
+LIBS := $(shell pkg-config --libs sdl3 fribidi libdrm libdecor-0)
+
+TARGET  := framebuffer
+SRCS    := main.c
+
 build:
-	gcc main.c -D_REENTRANT -I/usr/include/fribidi -I/usr/include/libdrm -I/usr/include/libdecor-0 -lSDL3 -o framebuffer
-run:
-	./framebuffer
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) $(LIBS)
+
+run: build
+	./$(TARGET)
+
+clean:
+	rm -f $(TARGET)
+
+.PHONY: build run clean
