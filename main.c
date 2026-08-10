@@ -1,27 +1,59 @@
-#define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-SDL_Window* window;
+#define WIDTH 320
+#define HEIGHT 200
 
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
-    window = SDL_CreateWindow("Testing", 960, 540, SDL_WINDOW_RESIZABLE);
-    return SDL_APP_CONTINUE;
-}
+// sometimes 'int' might not give a 32 bytes in older architectures
+uint32_t framebuffer[WIDTH * HEIGHT];
 
-SDL_AppResult SDL_AppIterate(void *appstate) {
-    return SDL_APP_CONTINUE;
-}
+int main(void) {
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_Texture *texture;
+    SDL_Event event;
 
-SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event){
-    if(event->type == SDL_EVENT_WINDOW_CLOSE_REQUESTED) {
-        return SDL_APP_SUCCESS;
+    window = SDL_CreateWindow(
+        "Title", 
+        WIDTH, 
+        HEIGHT, 
+        0);
+    
+    renderer = SDL_CreateRenderer(
+        window,
+        NULL
+    );
+
+    texture = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_XRGB8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        WIDTH,
+        HEIGHT
+    );
+
+    uint8_t is_running = 1;
+
+    while (is_running) {
+        
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+                is_running = 0;
+            }
+        }
+
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
     }
+    
 
-    return SDL_APP_CONTINUE;
-}
-
-void SDL_AppQuit(void *appstate, SDL_AppResult result) {
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return EXIT_SUCCESS;
 }
 
