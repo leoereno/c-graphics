@@ -43,8 +43,19 @@ int main(void) {
                 is_running = 0;
             }
         }
+       
+        framebuffer[16500] = 0xFF0000;
+
+        SDL_UpdateTexture(
+            texture,
+            NULL,
+            framebuffer,
+            //PITCH = width of texture in bytes
+            WIDTH * sizeof(uint32_t)
+        );
 
         SDL_RenderClear(renderer);
+        SDL_RenderTexture(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
     }
     
