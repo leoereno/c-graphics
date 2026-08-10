@@ -44,7 +44,7 @@ int main(void) {
             }
         }
        
-        framebuffer[16500] = 0xFF0000;
+        framebuffer[16500] = 0x00FF00;
 
         SDL_UpdateTexture(
             texture,
